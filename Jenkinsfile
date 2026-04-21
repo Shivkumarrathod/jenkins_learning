@@ -11,6 +11,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+                echo "successfully checked out code from repository"
             }
         }
 
@@ -22,7 +23,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'npm test'
+                sh 'npm run test'
             }
         }
 
