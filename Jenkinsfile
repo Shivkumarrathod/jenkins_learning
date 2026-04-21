@@ -16,24 +16,38 @@ pipeline {
         }
 
         stage('Install Dependencies') {
+            agent {
+                docker {
+                    image 'node:20-alpine'
+                    args '-v ${WORKSPACE}:/app -w /app'
+                }
+            }
             steps {
-                sh 'docker run --rm -v ${WORKSPACE}:/app -w /app node:20-alpine npm install'
+                sh 'npm install'
             }
         }
 
         stage('Test') {
+            agent {
+                docker {
+                    image 'node:20-alpine'
+                    args '-v ${WORKSPACE}:/app -w /app'
+                }
+            }
             steps {
-                sh 'docker run --rm -v ${WORKSPACE}:/app -w /app node:20-alpine npm test'
+                sh 'npm test'
             }
         }
 
         stage('Build Docker Image') {
+            agent any
             steps {
                 sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
             }
         }
 
         stage('Deploy') {
+            agent any
             steps {
                 sh '''
                     docker stop ${IMAGE_NAME} || true
