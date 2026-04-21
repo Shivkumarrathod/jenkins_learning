@@ -16,13 +16,13 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh 'docker run --rm -v ${WORKSPACE}:/app -w /app node:20-alpine npm install'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'npm test'
+                sh 'docker run --rm -v ${WORKSPACE}:/app -w /app node:20-alpine npm test'
             }
         }
 
